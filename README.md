@@ -1,7 +1,7 @@
 # Project2
 Working in your group, create a single page React application that utilizes 3 different data sources. These sources could be public APIs, APIs you create yourself, or browser storage methods like localStorage (JSON files stored on the users browser). The topic of the dashboard can be anything your team would like, as long as it's a single page application and meets the requirements below:
 
-Requirements
+Requirements  
 
 1. The application should use React as the main front-end framework.
 
