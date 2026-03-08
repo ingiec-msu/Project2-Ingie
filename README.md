@@ -1,24 +1,16 @@
-# Project2
-Working in your group, create a single page React application that utilizes 3 different data sources. These sources could be public APIs, APIs you create yourself, or browser storage methods like localStorage (JSON files stored on the users browser). The topic of the dashboard can be anything your team would like, as long as it's a single page application and meets the requirements below:
+# React + Vite
 
-Requirements  
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-1. The application should use React as the main front-end framework.
+Currently, two official plugins are available:
 
-2. The application should have a clear theme/purpose, a logo, and an overall brand/theme that's used across the site (please avoid the AI-created UI dark mode with gradient font colors).
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-3. The application should utilize 3 different data sources, you DO NOT have to choose one from each (e.g. you can use 3 APIs, 1 API and two localStorage objects, etc):
-    1. Public APIs
-    2. Your own homemade APIs (host static JSON files you create on Github Pages)
-    3. WebStorage API (localStorage and sessionStorage)
+## React Compiler
 
-4. The application should have some form of interaction that changes/updates/remixes the data (geolocation, user entry, sorting/searching, etc).
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-5. The application should be hosted on Netlify using a custom subdomain.
+## Expanding the ESLint configuration
 
-6. Add a link and screenshot of your React dashboard to your team website (make sure this is updated too).
-
-7. Submit links to:
-    1. The GitHub repo for the project.
-    2. The public Netlify link of the live React dashboard.
-    3. The public link to your updated team website.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
