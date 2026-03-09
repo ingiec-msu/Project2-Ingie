@@ -15,7 +15,28 @@ function Events() {
     setLoading(true);
     setError(null);
     try {
-      const url = `https://app.ticketmaster.com/discovery/v2/events.json?size=4&page=${currentPage}&apikey=${apiKey}${query ? `&keyword=${encodeURIComponent(query)}` : ''}`;
+      let url;
+      if (query) {
+        // First, search for attractions by artist name
+        const attractionUrl = `https://app.ticketmaster.com/discovery/v2/attractions.json?keyword=${encodeURIComponent(query)}&apikey=${apiKey}`;
+        const attractionResponse = await fetch(attractionUrl);
+        if (!attractionResponse.ok) {
+          throw new Error('Failed to fetch attractions');
+        }
+        const attractionData = await attractionResponse.json();
+        if (attractionData._embedded && attractionData._embedded.attractions && attractionData._embedded.attractions.length > 0) {
+          const attractionId = attractionData._embedded.attractions[0].id;
+          // Now fetch events for this attraction
+          url = `https://app.ticketmaster.com/discovery/v2/events.json?attractionId=${attractionId}&size=4&page=${currentPage}&apikey=${apiKey}`;
+        } else {
+          setEvents([]);
+          setTotalPages(0);
+          setLoading(false);
+          return;
+        }
+      } else {
+        url = `https://app.ticketmaster.com/discovery/v2/events.json?size=4&page=${currentPage}&apikey=${apiKey}`;
+      }
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Failed to fetch events');
@@ -64,7 +85,7 @@ function Events() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search events..."
+          placeholder="Search by artist name..."
           style={{ marginRight: '10px' }}
         />
         <button type="submit">Search</button>
