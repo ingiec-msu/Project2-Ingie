@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import EventsWidget from './EventsWidget.jsx';
 
 function Events() {
@@ -7,18 +7,21 @@ function Events() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const apiKey = import.meta.env.VITE_TICKETMASTER_API_KEY;
 
-  const fetchEvents = async (currentPage) => {
+  const fetchEvents = useCallback(async (currentPage, query = '') => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events.json?size=4&page=${currentPage}&apikey=${apiKey}`);
+      const url = `https://app.ticketmaster.com/discovery/v2/events.json?size=4&page=${currentPage}&apikey=${apiKey}${query ? `&keyword=${encodeURIComponent(query)}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Failed to fetch events');
       }
       const data = await response.json();
+      console.log(data); // As per the provided code
       if (data._embedded && data._embedded.events) {
         setEvents(data._embedded.events);
         setTotalPages(data.page.totalPages);
@@ -30,11 +33,11 @@ function Events() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiKey]);
 
   useEffect(() => {
-    fetchEvents(page);
-  }, [page]);
+    fetchEvents(page, searchQuery);
+  }, [page, searchQuery, fetchEvents]);
 
   const handlePrev = () => {
     if (page > 0) {
@@ -48,14 +51,32 @@ function Events() {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(0); // Reset to first page on new search
+    // searchQuery state will trigger useEffect
+  };
+
   return (
-    <EventsWidget
-      events={events}
-      onPrev={handlePrev}
-      onNext={handleNext}
-      loading={loading}
-      error={error}
-    />
+    <div>
+      <form onSubmit={handleSearch} style={{ marginBottom: '20px' }}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search events..."
+          style={{ marginRight: '10px' }}
+        />
+        <button type="submit">Search</button>
+      </form>
+      <EventsWidget
+        events={events}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        loading={loading}
+        error={error}
+      />
+    </div>
   );
 }
 
